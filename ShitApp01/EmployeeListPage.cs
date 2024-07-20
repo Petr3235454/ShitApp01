@@ -39,7 +39,7 @@ namespace ShitApp01
             {
                 Console.WriteLine($"Размер груди: {femaleEmployee.BoobSize}");
             }
-            Console.WriteLine("[1] Удалить сотрудника");
+            Console.WriteLine("[1] Удалить сотрудника ");
             Console.WriteLine("[2] Редактировать");
             Console.WriteLine("[Escape] для выхода.");
 

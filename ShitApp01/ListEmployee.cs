@@ -12,7 +12,6 @@ namespace ShitApp01
 {
     public class ListEmployee : IEmployeeManagement
     {
-        private IEmployeeManagement listEmployee;
         public static List<Employee> employees { get; } = new List<Employee>(); //ясно
         public List<Employee> Employees => employees; //паблик поле для манипуляций со списком, ебаный фундамент, просто сердце всего нахуй
 
@@ -53,9 +52,11 @@ namespace ShitApp01
             // actions { ConsoleKey.NumPad1, () => AddEmployee("м")  },
             if (gender == "м")
             {
-                Console.WriteLine("Введите длину члена:\n");
+                Console.WriteLine("Введите длину члена (см):\n");
                 string dickLength = Console.ReadLine();
                 employees.Add(new MaleEmployee(name, firstName, lastName, salary, "м", dickLength));
+               
+
             }
             // actions { ConsoleKey.NumPad2, () => AddEmployee("ж")  },
             else if (gender == "ж")
@@ -63,6 +64,7 @@ namespace ShitApp01
                 Console.WriteLine("Введите размер груди:\n");
                 string boobSize = Console.ReadLine();
                 employees.Add(new FemaleEmployee(name, firstName, lastName, salary, "ж", boobSize));
+              
             }
             else
             {

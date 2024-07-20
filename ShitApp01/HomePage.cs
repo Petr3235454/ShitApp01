@@ -9,7 +9,7 @@ namespace ShitApp01
     public class HomePage : IPage
     {
         // Приватное поле типа IEmployeeManagement в данном контексте служит для хранения ссылки на объект, реализующий интерфейс IEmployeeManagement.
-        //Собственно если не создавать это поле, то словарь не работает абсолютно, любые правки в конструкторах классов ломают Dictionary pages с ошибкой нужен аргумент соответствующий параметру, ну логично
+        // Собственно если не создавать это поле, то словарь не работает абсолютно, любые правки в конструкторах классов ломают Dictionary pages с ошибкой нужен аргумент соответствующий параметру, ну логично
         
         private IEmployeeManagement listEmployee; 
 
@@ -50,8 +50,8 @@ namespace ShitApp01
             Console.Clear();
             Header.Logo();
             Console.WriteLine(" Домашняя страница ");
-            Console.WriteLine("[1] Список пользователей");
-            Console.WriteLine("[2] Добавить сотрудника");
+            Console.WriteLine("[1] Список сотрудников");
+            Console.WriteLine("[2] Добавить сотрудника ");
         }
     }
 }

@@ -50,8 +50,8 @@ namespace ShitApp01
         public void PrintInfo()
         {
             Header.Logo();
-            Console.WriteLine("[1] Добавить сотрудника мужчину ");
-            Console.WriteLine("[2] Добавить сотрудника женщину ");
+            Console.WriteLine("[1] Добавить мужчину ");
+            Console.WriteLine("[2] Добавить женщину ");
             Console.WriteLine("[3] Вернуться назад ");
         }
     }

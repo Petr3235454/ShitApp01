@@ -13,7 +13,7 @@ namespace ShitApp01
                 page.PrintInfo(); // Показываем информацию перед вводом пользователя
                 var key = Console.ReadKey().Key;
                 Console.Clear();
-                if (key == ConsoleKey.Escape || key == ConsoleKey.NumPad5 || key == ConsoleKey.NumPad3)
+                if (key == ConsoleKey.Escape || key == ConsoleKey.NumPad5 )
                     page = page.BackPage(); // При нажатии Escape - возврат на предыдущую страницу
                 else
                     page = page.NextChoice(key); // Обработка ввода пользователя

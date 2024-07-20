@@ -8,6 +8,7 @@ namespace ShitApp01
 {
     public interface IPage
     {
+    
         void Functional();
         void PrintInfo();
         IPage BackPage();
