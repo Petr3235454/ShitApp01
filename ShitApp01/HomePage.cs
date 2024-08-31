@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using ShitApp01.EmployeeServices;
+using ShitApp01.Interfaces;
+using ShitApp01.OtherUtilities;
+using ShitApp01.ProgramPages;
 namespace ShitApp01
 {
     public class HomePage : IPage
     {
-        //JOPA
+        
         // Приватное поле типа IEmployeeManagement в данном контексте служит для хранения ссылки на объект, реализующий интерфейс IEmployeeManagement.
         // Собственно если не создавать это поле, то словарь не работает абсолютно, любые правки в конструкторах классов ломают Dictionary pages с ошибкой нужен аргумент соответствующий параметру, ну логично
         
@@ -18,11 +21,11 @@ namespace ShitApp01
 
         public HomePage()
         {
-            listEmployee = new ListEmployee();
+            listEmployee = new ListEmployeeServices();
 
             pages = new Dictionary<ConsoleKey, IPage>()
             {
-                { ConsoleKey.NumPad1, new EmployeeListPage(listEmployee) },
+                { ConsoleKey.NumPad1, new EmployeeDisplayPage(listEmployee) },
                 { ConsoleKey.NumPad2, new AddEmployeePage(listEmployee) },
             };
         }
@@ -48,11 +51,10 @@ namespace ShitApp01
         
         public void PrintInfo()
         {
-            Console.Clear();
             Header.Logo();
-            Console.WriteLine(" Домашняя страница ");
-            Console.WriteLine("[1] Список сотрудников");
-            Console.WriteLine("[2] Добавить сотрудника ");
+            ConsoleWriter.ChooseWriter("Просмотр сотрудников", "Добавить сотрудника", "Домашняя страница");
+            
+            
         }
     }
 }

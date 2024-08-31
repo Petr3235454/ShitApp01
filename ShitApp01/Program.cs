@@ -1,4 +1,4 @@
-﻿using ShitApp01;
+﻿using ShitApp01.Interfaces;
 using System.Security.Cryptography.X509Certificates;
 
 namespace ShitApp01
