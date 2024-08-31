@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using ShitApp01.EmployeeServices;
+using ShitApp01.Interfaces;
+using ShitApp01.OtherUtilities;
 
-namespace ShitApp01
+namespace ShitApp01.ProgramPages
 {
     internal class AddEmployeePage : IPage
     {
@@ -11,11 +14,11 @@ namespace ShitApp01
 
         //В данном случае, конструктор AddEmployeePage принимает в качестве параметра объект listEmployee типа, реализующего интерфейс IEmployeeManagement.
         //чтобы установить связь между страницей и объектом управления сотрудниками. Это позволяет AddEmployeePage взаимодействовать с методами в IEmployeeManagement
-        public AddEmployeePage(IEmployeeManagement listEmployee) 
+        public AddEmployeePage(IEmployeeManagement listEmployee)
         {
-            this.listEmployee = listEmployee; 
+            this.listEmployee = listEmployee;
         }
-
+        
         public IPage BackPage()
         {
             return new HomePage();
@@ -50,9 +53,7 @@ namespace ShitApp01
         public void PrintInfo()
         {
             Header.Logo();
-            Console.WriteLine("[1] Добавить сотрудника мужчину ");
-            Console.WriteLine("[2] Добавить сотрудника женщину ");
-            Console.WriteLine("[3] Вернуться назад ");
+            ConsoleWriter.ChooseWriter("Добавить мужчину", "Добавить женщину", "Вернуться назад");
         }
     }
 }

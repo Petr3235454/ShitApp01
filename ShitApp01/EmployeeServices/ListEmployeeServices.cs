@@ -6,20 +6,22 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using ShitApp01.Interfaces;
+using ShitApp01.Models;
+using ShitApp01.OtherUtilities;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace ShitApp01
+namespace ShitApp01.EmployeeServices
 {
-    public class ListEmployee : IEmployeeManagement
+    public class ListEmployeeServices : IEmployeeManagement
     {
-        private IEmployeeManagement listEmployee;
         public static List<Employee> employees { get; } = new List<Employee>(); //ясно
         public List<Employee> Employees => employees; //паблик поле для манипуляций со списком, ебаный фундамент, просто сердце всего нахуй
 
         public readonly Dictionary<ConsoleKey, Action> actions;
 
         // Словарь для выбора пола при создании сотрудника
-        public ListEmployee() 
+        public ListEmployeeServices()
         {
             actions = new Dictionary<ConsoleKey, Action>()
             {
@@ -44,7 +46,7 @@ namespace ShitApp01
                 Console.WriteLine("Введите зарплату сотрудника:\n");
                 if (int.TryParse(Console.ReadLine(), out salary))
                 {
-                    break; 
+                    break;
                 }
                 Console.Clear();
                 Console.WriteLine("Введите корректную зарплату\n");
@@ -53,9 +55,11 @@ namespace ShitApp01
             // actions { ConsoleKey.NumPad1, () => AddEmployee("м")  },
             if (gender == "м")
             {
-                Console.WriteLine("Введите длину члена:\n");
+                Console.WriteLine("Введите длину члена (см):\n");
                 string dickLength = Console.ReadLine();
                 employees.Add(new MaleEmployee(name, firstName, lastName, salary, "м", dickLength));
+
+
             }
             // actions { ConsoleKey.NumPad2, () => AddEmployee("ж")  },
             else if (gender == "ж")
@@ -63,6 +67,8 @@ namespace ShitApp01
                 Console.WriteLine("Введите размер груди:\n");
                 string boobSize = Console.ReadLine();
                 employees.Add(new FemaleEmployee(name, firstName, lastName, salary, "ж", boobSize));
+                
+
             }
             else
             {
@@ -99,7 +105,7 @@ namespace ShitApp01
                 Console.ReadKey();
                 Console.Clear();
             }
-            
+
         }
 
         public void DeleteEmployeeByIndex(Employee employee)

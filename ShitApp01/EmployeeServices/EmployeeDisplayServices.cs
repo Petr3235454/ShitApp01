@@ -1,30 +1,19 @@
-﻿using System;
+﻿using ShitApp01.Interfaces;
+using ShitApp01.Models;
+using ShitApp01.OtherUtilities;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Reflection;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ShitApp01
+namespace ShitApp01.EmployeeServices
 {
-    internal class EmployeeListPage : IPage
+    public class EmployeeDisplayServices 
     {
-        // Приватное поле типа IEmployeeManagement в данном контексте служит для хранения ссылки на объект, реализующий интерфейс IEmployeeManagement.
-       
+        
         private IEmployeeManagement listEmployee;
-
-        //В данном случае, конструктор EmployeeListPage принимает в качестве параметра объект listEmployee типа, реализующего интерфейс IEmployeeManagement.
-        //чтобы установить связь между страницей и объектом управления сотрудниками. Это позволяет EmployeeListPage взаимодействовать с методами в IEmployeeManagement
-        public EmployeeListPage(IEmployeeManagement listEmployee) 
-        {
-            this.listEmployee = listEmployee;
-        }
-
-        public IPage BackPage()
-        {
-            return new HomePage();
-        }
-
-        //Метод для отображения всех характеристик(полного отображения) выбранного сотрудника по индексу
-        private void DisplayEmployeeInformation(Employee employee) 
+        public void DisplayEmployeeInformation(Employee employee)
         {
             Console.Clear();
             Header.Logo();
@@ -39,16 +28,13 @@ namespace ShitApp01
             {
                 Console.WriteLine($"Размер груди: {femaleEmployee.BoobSize}");
             }
-            Console.WriteLine("[1] Удалить сотрудника");
-            Console.WriteLine("[2] Редактировать");
-            Console.WriteLine("[Escape] для выхода.");
 
-           
-            listEmployee.DeleteEmployeeByIndex(employee); // Вызов метода удаления сотрудника по индексу из класса ListEmployee.cs
-            
+            ConsoleWriter.ChooseWriter("Удалить сотрудника", "Редактировать", "[Escape] для выхода");
+
+            // Вызов метода удаления сотрудника по индексу из класса ListEmployee.cs
+            listEmployee.DeleteEmployeeByIndex(employee);
         }
 
-        //Метод отображения всех сотрудников, отображение идёт краткое, только [индекс] и  ФИО
         public void DisplayAllEmployees()
         {
             while (true)
@@ -56,10 +42,21 @@ namespace ShitApp01
                 Console.Clear();
                 Header.Logo();
                 Console.WriteLine("ВСЕ СОТРУДНИКИ");
+
+                // Проверяем, что список сотрудников не равен null
+                if (listEmployee?.Employees == null || listEmployee.Employees.Count == 0)
+                {
+                    Console.WriteLine("Нет сотрудников для отображения.");
+                    Console.WriteLine("Нажмите Escape для выхода.");
+                    Console.ReadKey();
+                    return;
+                }
+
                 for (int i = 0; i < listEmployee.Employees.Count; i++)
                 {
                     Console.WriteLine($"[{i + 1}] Имя: {listEmployee.Employees[i].Name} Фамилия: {listEmployee.Employees[i].FirstName} Отчество: {listEmployee.Employees[i].LastName}");
                 }
+
                 Console.WriteLine("Введите индекс сотрудника для отображения подробной информации (или нажмите Escape для выхода):");
                 var key = Console.ReadKey(true);
 
@@ -68,11 +65,10 @@ namespace ShitApp01
                     Console.Clear();
                     return;
                 }
-                //Далее при вводе индекса идёт вызов DisplayEmployeeInformation, который отображает все характеристики выбранного человека
+
                 if (int.TryParse(key.KeyChar.ToString(), out int index) && index > 0 && index <= listEmployee.Employees.Count)
                 {
                     DisplayEmployeeInformation(listEmployee.Employees[index - 1]);
-                    
                 }
                 else
                 {
@@ -81,7 +77,7 @@ namespace ShitApp01
             }
         }
 
-        //Ну это вообще пиздец, согласен, я в инете нашёл, ахуел, очень сложно, но работает, метод деления на мужчин и женщин
+
         public void DisplayAllEmployeesByGender(string gender)
         {
             while (true)
@@ -90,7 +86,9 @@ namespace ShitApp01
                 Header.Logo();
                 Console.WriteLine($"ВСЕ СОТРУДНИКИ {gender.ToUpper()}");
 
-                var employeesByGender = gender == "мужчин" ? listEmployee.Employees.OfType<MaleEmployee>().Cast<Employee>().ToList() : listEmployee.Employees.OfType<FemaleEmployee>().Cast<Employee>().ToList();
+                var employeesByGender = gender == "мужчин" ?
+                    listEmployee.Employees.OfType<MaleEmployee>().Cast<Employee>().ToList() :
+                    listEmployee.Employees.OfType<FemaleEmployee>().Cast<Employee>().ToList();
 
                 if (employeesByGender.Any())
                 {
@@ -134,42 +132,6 @@ namespace ShitApp01
                     Console.Clear();
                 }
             }
-        }
-
-        public void Functional()
-        {
-            // Возможно, какая-то функциональность
-        }
-
-
-        public IPage NextChoice(ConsoleKey key)
-        {
-            Dictionary<ConsoleKey, Action> actions = new Dictionary<ConsoleKey, Action>
-            {
-                { ConsoleKey.NumPad1, () => DisplayAllEmployees() },
-                { ConsoleKey.NumPad2, () => DisplayAllEmployeesByGender("мужчин") },
-                { ConsoleKey.NumPad3, () => DisplayAllEmployeesByGender("женщин") },
-                { ConsoleKey.NumPad4,() => listEmployee.ClearAllEmployees() },
-                { ConsoleKey.NumPad5,() => BackPage() },
-                { ConsoleKey.Escape, () => BackPage() }
-            };
-
-            if (actions.ContainsKey(key))
-            {
-                actions[key]();
-            }
-
-            return this;
-        }
-
-        public void PrintInfo()
-        {
-            Header.Logo();
-            Console.WriteLine("[1] Показать всех сотрудников");
-            Console.WriteLine("[2] Показать всех сотрудников мужчин");
-            Console.WriteLine("[3] Показать всех сотрудников женщин");
-            Console.WriteLine("[4] Уволить всех нахуй");
-            Console.WriteLine("[5] Назад");
         }
     }
 }
