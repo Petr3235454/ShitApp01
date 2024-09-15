@@ -12,9 +12,6 @@ namespace ShitApp01
     public class HomePage : IPage
     {
         
-        // Приватное поле типа IEmployeeManagement в данном контексте служит для хранения ссылки на объект, реализующий интерфейс IEmployeeManagement.
-        // Собственно если не создавать это поле, то словарь не работает абсолютно, любые правки в конструкторах классов ломают Dictionary pages с ошибкой нужен аргумент соответствующий параметру, ну логично
-        
         private IEmployeeManagement listEmployee; 
 
         private readonly Dictionary<ConsoleKey, IPage> pages;
@@ -37,7 +34,7 @@ namespace ShitApp01
 
         public void Functional()
         {
-            // Логика функции Functional
+            
         }
 
         public IPage NextChoice(ConsoleKey key)

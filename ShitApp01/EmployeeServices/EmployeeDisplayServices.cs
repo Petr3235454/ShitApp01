@@ -4,20 +4,23 @@ using ShitApp01.OtherUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShitApp01.EmployeeServices
 {
-    public class EmployeeDisplayServices 
+    public class EmployeeDisplayServices
     {
-        
-        private IEmployeeManagement listEmployee;
+        private readonly IEmployeeManagement listEmployee;
+
+        public EmployeeDisplayServices(IEmployeeManagement employeeManagement)
+        {
+
+            listEmployee = employeeManagement;
+        }
+
         public void DisplayEmployeeInformation(Employee employee)
         {
             Console.Clear();
             Header.Logo();
-
             Console.WriteLine($"Имя: {employee.Name} Фамилия: {employee.FirstName} Отчество: {employee.LastName} Зарплата: {employee.Salary}");
 
             if (employee is MaleEmployee maleEmployee)
@@ -30,53 +33,32 @@ namespace ShitApp01.EmployeeServices
             }
 
             ConsoleWriter.ChooseWriter("Удалить сотрудника", "Редактировать", "[Escape] для выхода");
-
-            // Вызов метода удаления сотрудника по индексу из класса ListEmployee.cs
             listEmployee.DeleteEmployeeByIndex(employee);
+
+            PageCleaner.ClearAndWait("Информация о сотруднике обновлена.");
+            
         }
 
         public void DisplayAllEmployees()
         {
             while (true)
             {
-                Console.Clear();
                 Header.Logo();
                 Console.WriteLine("ВСЕ СОТРУДНИКИ");
 
-                // Проверяем, что список сотрудников не равен null
-                if (listEmployee?.Employees == null || listEmployee.Employees.Count == 0)
+                if (!listEmployee.Employees.Any())
                 {
-                    Console.WriteLine("Нет сотрудников для отображения.");
-                    Console.WriteLine("Нажмите Escape для выхода.");
-                    Console.ReadKey();
+                    PageCleaner.ClearAndWait("Нет сотрудников для отображения.\nНажмите Escape для выхода.");
                     return;
                 }
 
-                for (int i = 0; i < listEmployee.Employees.Count; i++)
-                {
-                    Console.WriteLine($"[{i + 1}] Имя: {listEmployee.Employees[i].Name} Фамилия: {listEmployee.Employees[i].FirstName} Отчество: {listEmployee.Employees[i].LastName}");
-                }
+                DisplayEmployeesList(listEmployee.Employees);
+                int selectedIndex = GetEmployeeIndex(listEmployee.Employees.Count);
 
-                Console.WriteLine("Введите индекс сотрудника для отображения подробной информации (или нажмите Escape для выхода):");
-                var key = Console.ReadKey(true);
-
-                if (key.Key == ConsoleKey.Escape)
-                {
-                    Console.Clear();
-                    return;
-                }
-
-                if (int.TryParse(key.KeyChar.ToString(), out int index) && index > 0 && index <= listEmployee.Employees.Count)
-                {
-                    DisplayEmployeeInformation(listEmployee.Employees[index - 1]);
-                }
-                else
-                {
-                    Console.WriteLine("Некорректный ввод. Повторите попытку.");
-                }
+                if (selectedIndex == -1) return;
+                DisplayEmployeeInformation(listEmployee.Employees[selectedIndex]);
             }
         }
-
 
         public void DisplayAllEmployeesByGender(string gender)
         {
@@ -86,51 +68,53 @@ namespace ShitApp01.EmployeeServices
                 Header.Logo();
                 Console.WriteLine($"ВСЕ СОТРУДНИКИ {gender.ToUpper()}");
 
-                var employeesByGender = gender == "мужчин" ?
-                    listEmployee.Employees.OfType<MaleEmployee>().Cast<Employee>().ToList() :
-                    listEmployee.Employees.OfType<FemaleEmployee>().Cast<Employee>().ToList();
+                var employeesByGender = gender == "мужчин"
+                    ? listEmployee.Employees.OfType<MaleEmployee>().Cast<Employee>().ToList()
+                    : listEmployee.Employees.OfType<FemaleEmployee>().Cast<Employee>().ToList();
 
                 if (employeesByGender.Any())
                 {
-                    for (int i = 0; i < employeesByGender.Count; i++)
-                    {
-                        Console.WriteLine($"[{i + 1}] Имя: {employeesByGender[i].Name} Фамилия: {employeesByGender[i].FirstName} Отчество: {employeesByGender[i].LastName}");
-                    }
+                    DisplayEmployeesList(employeesByGender);
+                    int selectedIndex = GetEmployeeIndex(employeesByGender.Count);
+                    if (selectedIndex == -1) return;
 
-                    Console.WriteLine("Введите индекс сотрудника для отображения подробной информации (или нажмите Escape для выхода):");
-                    var key = Console.ReadKey(true);
-
-                    if (key.Key == ConsoleKey.Escape)
-                    {
-                        Console.Clear();
-                        return;
-                    }
-
-                    if (int.TryParse(key.KeyChar.ToString(), out int index) && index > 0 && index <= employeesByGender.Count)
-                    {
-                        Console.Clear();
-                        DisplayEmployeeInformation(employeesByGender[index - 1]);
-                    }
-                    else
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Некорректный ввод. Повторите попытку.");
-                    }
+                    DisplayEmployeeInformation(employeesByGender[selectedIndex]);
                 }
                 else
                 {
-                    Console.Clear();
-                    Header.Logo();
-                    Console.WriteLine("Нет сотрудников для отображения.");
-                    Console.WriteLine("Нажмите Escape для продолжения.");
-                    var key = Console.ReadKey(true);
-                    if (key.Key == ConsoleKey.Escape)
-                    {
-                        Console.Clear();
-                        return;
-                    }
-                    Console.Clear();
+                    PageCleaner.ClearAndWait("Нет сотрудников для отображения.\nНажмите Escape для продолжения.");
+                    return;
                 }
+            }
+        }
+
+        private void DisplayEmployeesList(List<Employee> employees)
+        {
+            for (int i = 0; i < employees.Count; i++)
+            {
+                Console.WriteLine($"[{i + 1}] Имя: {employees[i].Name} Фамилия: {employees[i].FirstName} Отчество: {employees[i].LastName}");
+            }
+        }
+
+        private int GetEmployeeIndex(int employeeCount)
+        {
+            Console.WriteLine("Введите индекс сотрудника для отображения подробной информации (или нажмите Escape для выхода):");
+            var key = Console.ReadKey(true);
+
+            if (key.Key == ConsoleKey.Escape)
+            {
+                return -1;
+            }
+
+            if (int.TryParse(key.KeyChar.ToString(), out int index) && index > 0 && index <= employeeCount)
+            {
+                return index - 1;
+            }
+            else
+            {
+                Console.WriteLine("Некорректный ввод. Повторите попытку.");
+                PageCleaner.ClearAndWait("Пожалуйста, попробуйте снова.");
+                return GetEmployeeIndex(employeeCount);
             }
         }
     }
