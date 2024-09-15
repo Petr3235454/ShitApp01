@@ -9,6 +9,7 @@ using System.IO;
 
 namespace ShitApp01.EmployeeServices
 {
+<<<<<<< HEAD
     internal class EmployeeData
     {
         public static void SaveEmployeesToJson(List<Employee> employees)
@@ -34,4 +35,29 @@ namespace ShitApp01.EmployeeServices
             return new List<Employee>(); 
         }
     }
+=======
+   internal class EmployeeData
+   {
+
+       void SEX() { }
+
+
+
+
+
+
+       public static void SaveEmployeesToJson(List<Employee> employees)
+       {
+           string jsonList = JsonSerializer.Serialize(employees);
+           File.WriteAllText("employees.json", jsonList);
+       }
+
+       public static List<Employee> LoadEmployeesFromJson()
+       {
+           string jsonList = File.ReadAllText("employees.json");
+           return JsonSerializer.Deserialize<List<Employee>>(jsonList);
+
+       }
+   }
+>>>>>>> b7175beaa08b4f600d3b1af2c0388c5e050bf7bd
 }

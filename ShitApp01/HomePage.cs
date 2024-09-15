@@ -11,6 +11,12 @@ namespace ShitApp01
 {
     public class HomePage : IPage
     {
+<<<<<<< HEAD
+=======
+        
+        // Приватное поле типа IEmployeeManagement в данном контексте служит для хранения ссылки на объект, реализующий интерфейс IEmployeeManagement.
+        // Собственно если не создавать это поле, то словарь не работает абсолютно, любые правки в конструкторах классов ломают Dictionary pages с ошибкой нужен аргумент соответствующий параметру, ну логично
+>>>>>>> b7175beaa08b4f600d3b1af2c0388c5e050bf7bd
         
         private IEmployeeManagement listEmployee; 
 

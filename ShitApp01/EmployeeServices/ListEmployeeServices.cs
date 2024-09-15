@@ -1,17 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+<<<<<<< HEAD
 using ShitApp01.Interfaces;
 using ShitApp01.Models;
 using ShitApp01.OtherUtilities;
 using Newtonsoft.Json;
 using System.IO;
+=======
+using System.Net;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using ShitApp01.Interfaces;
+using ShitApp01.Models;
+using ShitApp01.OtherUtilities;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+>>>>>>> b7175beaa08b4f600d3b1af2c0388c5e050bf7bd
 
 namespace ShitApp01.EmployeeServices
 {
     public class ListEmployeeServices : IEmployeeManagement
     {
+<<<<<<< HEAD
         public List<Employee> Employees => EmployeeStorage.Employees;
+=======
+        public static List<Employee> employees { get; } = new List<Employee>(); //ясно
+        public List<Employee> Employees => employees; //паблик поле для манипуляций со списком, ебаный фундамент, просто сердце всего нахуй
+
+        public readonly Dictionary<ConsoleKey, Action> actions;
+
+        // Словарь для выбора пола при создании сотрудника
+>>>>>>> b7175beaa08b4f600d3b1af2c0388c5e050bf7bd
         public ListEmployeeServices()
         {
             var loadedEmployees = EmployeeData.LoadEmployeesFromJson();
@@ -45,13 +66,25 @@ namespace ShitApp01.EmployeeServices
             {
                 Console.WriteLine("Введите длину члена (см):\n");
                 string dickLength = Console.ReadLine();
+<<<<<<< HEAD
                 EmployeeStorage.AddEmployee(new MaleEmployee(name, firstName, lastName, salary, "м", dickLength));
+=======
+                employees.Add(new MaleEmployee(name, firstName, lastName, salary, "м", dickLength));
+
+
+>>>>>>> b7175beaa08b4f600d3b1af2c0388c5e050bf7bd
             }
             else if (gender == "ж")
             {
                 Console.WriteLine("Введите размер груди:\n");
                 string boobSize = Console.ReadLine();
+<<<<<<< HEAD
                 EmployeeStorage.AddEmployee(new FemaleEmployee(name, firstName, lastName, salary, "ж", boobSize));
+=======
+                employees.Add(new FemaleEmployee(name, firstName, lastName, salary, "ж", boobSize));
+                
+
+>>>>>>> b7175beaa08b4f600d3b1af2c0388c5e050bf7bd
             }
             else
             {
@@ -71,9 +104,22 @@ namespace ShitApp01.EmployeeServices
                 PageCleaner.ClearAndWait("Нет сотрудников для увольнения");
                 return;
             }
+<<<<<<< HEAD
             EmployeeStorage.ClearAll();
             EmployeeData.SaveEmployeesToJson(EmployeeStorage.Employees);
             PageCleaner.ClearAndWait("Все сотрудники удалены");
+=======
+            else
+            {
+                Header.Logo();
+                employees.Clear();
+                Console.WriteLine("Все нахуй уволены!\n");
+                Console.WriteLine("Нажмите любую клавишу для продолжения\n");
+                Console.ReadKey();
+                Console.Clear();
+            }
+
+>>>>>>> b7175beaa08b4f600d3b1af2c0388c5e050bf7bd
         }
 
 
