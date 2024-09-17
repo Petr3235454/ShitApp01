@@ -10,13 +10,13 @@ namespace ShitApp01
             IPage page = new HomePage();
             while (true)
             {
-                page.PrintInfo(); // Показываем информацию перед вводом пользователя
+                page.PrintInfo(); 
                 var key = Console.ReadKey().Key;
                 Console.Clear();
                 if (key == ConsoleKey.Escape || key == ConsoleKey.NumPad5 )
-                    page = page.BackPage(); // При нажатии Escape - возврат на предыдущую страницу
+                    page = page.BackPage(); 
                 else
-                    page = page.NextChoice(key); // Обработка ввода пользователя
+                    page = page.NextChoice(key); 
             }
         }
     }

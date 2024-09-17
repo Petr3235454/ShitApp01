@@ -14,19 +14,18 @@ namespace ShitApp01
         public static void AddEmployee(Employee employee)
         {
             employees.Add(employee);
-            EmployeeData.SaveEmployeesToJson(EmployeeStorage.Employees);
         }
 
         public static void RemoveEmployee(Employee employee)
         {
             employees.Remove(employee);
-            EmployeeData.SaveEmployeesToJson(EmployeeStorage.Employees);
+            
         }
 
         public static void ClearAll()
         {
             employees.Clear();
-            EmployeeData.SaveEmployeesToJson(EmployeeStorage.Employees);
+            
         }
     }
 }

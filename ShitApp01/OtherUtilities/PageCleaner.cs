@@ -13,7 +13,6 @@ namespace ShitApp01.OtherUtilities
             Console.Clear();
             Header.Logo();
             Console.WriteLine(message);
-            Console.WriteLine("Нажмите любую клавишу для продолжения...");
             Console.ReadKey(true);
             Console.Clear();
         }
