@@ -1,111 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using ShitApp01.Interfaces;
 using ShitApp01.Models;
 using ShitApp01.OtherUtilities;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ShitApp01.EmployeeServices
 {
-    public class ListEmployeeServices : IEmployeeManagement
+    public class ListEmployeeServices
     {
-        public static List<Employee> employees { get; } = new List<Employee>(); //ясно
-        public List<Employee> Employees => employees; //паблик поле для манипуляций со списком, ебаный фундамент, просто сердце всего нахуй
+        private readonly EmployeeInputHandler _inputHandler;
+        public List<Employee> Employees => EmployeeStorage.Employees;
 
-        public readonly Dictionary<ConsoleKey, Action> actions;
-
-        // Словарь для выбора пола при создании сотрудника
         public ListEmployeeServices()
         {
-            actions = new Dictionary<ConsoleKey, Action>()
+            _inputHandler = new EmployeeInputHandler();
+            var loadedEmployees = EmployeeData.LoadEmployeesFromJson();
+            foreach (var employee in loadedEmployees)
             {
-                { ConsoleKey.NumPad1, () => AddEmployee("м")  },
-                { ConsoleKey.NumPad2, () => AddEmployee("ж")  },
-            };
+                EmployeeStorage.AddEmployee(employee);
+            }
         }
 
-        // Создание сотрудника
         public void AddEmployee(string gender)
         {
-            Console.WriteLine("Введите имя сотрудника:\n");
-            string name = Console.ReadLine();
-            Console.WriteLine("Введите фамилию сотрудника:\n");
-            string firstName = Console.ReadLine();
-            Console.WriteLine("Введите отчество сотрудника:\n");
-            string lastName = Console.ReadLine();
+            string name = _inputHandler.GetName();
+            string firstName = _inputHandler.GetFirstName();
+            string lastName = _inputHandler.GetLastName();
+            int salary = _inputHandler.GetSalary();
 
-            int salary;
-            while (true)
-            {
-                Console.WriteLine("Введите зарплату сотрудника:\n");
-                if (int.TryParse(Console.ReadLine(), out salary))
-                {
-                    break;
-                }
-                Console.Clear();
-                Console.WriteLine("Введите корректную зарплату\n");
-            }
+            Employee newEmployee;
 
-            // actions { ConsoleKey.NumPad1, () => AddEmployee("м")  },
             if (gender == "м")
             {
-                Console.WriteLine("Введите длину члена (см):\n");
-                string dickLength = Console.ReadLine();
-                employees.Add(new MaleEmployee(name, firstName, lastName, salary, "м", dickLength));
-
-
+                string dickLength = _inputHandler.GetGenderSpecificInput(gender);
+                newEmployee = new MaleEmployee(name, firstName, lastName, salary, "м", dickLength);
             }
-            // actions { ConsoleKey.NumPad2, () => AddEmployee("ж")  },
             else if (gender == "ж")
             {
-                Console.WriteLine("Введите размер груди:\n");
-                string boobSize = Console.ReadLine();
-                employees.Add(new FemaleEmployee(name, firstName, lastName, salary, "ж", boobSize));
-                
-
+                string boobSize = _inputHandler.GetGenderSpecificInput(gender);
+                newEmployee = new FemaleEmployee(name, firstName, lastName, salary, "ж", boobSize);
             }
             else
             {
                 Console.WriteLine("Некорректно указан пол\n");
-                return; // Выход из метода из-за неправильной спецификации пола
+                return;
             }
 
-            Console.Clear();
-            Console.WriteLine("Сотрудник успешно добавлен\n");
-            Console.WriteLine("Нажмите любую клавишу для продолжения\n");
-            Console.ReadKey();
-            Console.Clear();
-            Console.WriteLine($"Количество сотрудников: {employees.Count}\n");
+            EmployeeStorage.AddEmployee(newEmployee);
+            EmployeeData.SaveEmployeesToJson(EmployeeStorage.Employees);
+
+            PageCleaner.ClearAndWait($"Сотрудник успешно добавлен\nКоличество сотрудников: {EmployeeStorage.Employees.Count}\n");
         }
 
-        public void ClearAllEmployees()
+        public static void ClearAllEmployees()
         {
-            Header.Logo();
-            Console.Clear();
-            if (employees.Count == 0)
+            if (EmployeeStorage.Employees.Count == 0)
             {
-                Header.Logo();
-                Console.WriteLine("Увольнять некого!\n");
-                Console.WriteLine("Нажмите любую клавишу для продолжения\n");
-                Console.ReadKey();
-                Console.Clear();
-            }
-            else
-            {
-                Header.Logo();
-                employees.Clear();
-                Console.WriteLine("Все нахуй уволены!\n");
-                Console.WriteLine("Нажмите любую клавишу для продолжения\n");
-                Console.ReadKey();
-                Console.Clear();
+                PageCleaner.ClearAndWait("Нет сотрудников для увольнения");
+                return;
             }
 
+            EmployeeStorage.ClearAll();
+            EmployeeData.SaveEmployeesToJson(EmployeeStorage.Employees);
+            PageCleaner.ClearAndWait("Все сотрудники удалены");
         }
 
         public void DeleteEmployeeByIndex(Employee employee)
@@ -115,6 +73,7 @@ namespace ShitApp01.EmployeeServices
                 var key = Console.ReadKey(true);
                 if (key.Key == ConsoleKey.Escape)
                 {
+                    Console.Clear();
                     return;
                 }
                 if (key.Key == ConsoleKey.NumPad1)
@@ -123,13 +82,15 @@ namespace ShitApp01.EmployeeServices
                     var confirmationKey = Console.ReadKey(true);
                     if (confirmationKey.Key == ConsoleKey.Y)
                     {
-                        employees.Remove(employee);
+                        EmployeeStorage.RemoveEmployee(employee);
                         Console.WriteLine("Сотрудник удален.\n");
+                        Thread.Sleep(2000);
                         return;
                     }
                     else if (confirmationKey.Key == ConsoleKey.N)
                     {
                         Console.WriteLine("Удаление отменено.\n");
+                        Thread.Sleep(2000);
                         return;
                     }
                 }
@@ -137,3 +98,4 @@ namespace ShitApp01.EmployeeServices
         }
     }
 }
+
