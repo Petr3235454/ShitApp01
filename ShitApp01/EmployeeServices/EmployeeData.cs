@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.IO;
@@ -21,8 +21,10 @@ namespace ShitApp01.EmployeeServices
                 if (File.Exists("employees.json"))
                 {
                     string jsonList = File.ReadAllText("employees.json");
+
                     var employees = JsonSerializer.Deserialize<List<JsonEmployee>>(jsonList);
                     return MapJsonEmployeesToConcreteEmployees(employees);
+
                 }
             }
             catch (Exception ex)

@@ -43,7 +43,7 @@ namespace ShitApp01.EmployeeServices
                 Console.WriteLine("Введите корректную зарплату");
             }
         }
-
+      
         public int GetGenderSpecificInput(string gender)
         {
             while (true)
@@ -79,6 +79,7 @@ namespace ShitApp01.EmployeeServices
             }
         }
 
+
         private string GetValidatedInput(string fieldName)
         {
             string input;
@@ -86,7 +87,6 @@ namespace ShitApp01.EmployeeServices
             {
                 Console.WriteLine($"Введите {fieldName}:");
                 input = Console.ReadLine();
-
                 if (!string.IsNullOrWhiteSpace(input) && input.All(char.IsLetter))
                 {
                     return input;

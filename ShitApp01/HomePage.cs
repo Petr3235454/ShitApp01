@@ -21,6 +21,7 @@ namespace ShitApp01
             pages = new Dictionary<ConsoleKey, IPage>()
             {
                 { ConsoleKey.NumPad1, new EmployeeDisplayPage() }, 
+
                 { ConsoleKey.NumPad2, new AddEmployeePage() },
             };
         }

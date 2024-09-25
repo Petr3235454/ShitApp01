@@ -11,6 +11,7 @@ namespace ShitApp01
 
         public static List<Employee> Employees => employees;
 
+
         public static void LoadEmployeesFromJson()
         {
             var loadedEmployees = EmployeeData.LoadEmployeesFromJson();
@@ -20,6 +21,8 @@ namespace ShitApp01
             }
         }
 
+
+
         public static void AddEmployee(Employee employee)
         {
             employees.Add(employee);
@@ -28,6 +31,7 @@ namespace ShitApp01
         public static void RemoveEmployee(Employee employee)
         {
             employees.Remove(employee);
+
         }
 
         public static void ClearAll()
@@ -36,3 +40,4 @@ namespace ShitApp01
         }
     }
 }
+

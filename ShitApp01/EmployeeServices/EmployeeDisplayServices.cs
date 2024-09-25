@@ -15,6 +15,7 @@ namespace ShitApp01.EmployeeServices
         {
             Console.Clear();
             Header.Logo();
+
             Console.WriteLine($"\nИмя: {employee.Name} \nФамилия: {employee.FirstName} \nОтчество: {employee.LastName} \nЗарплата: {employee.Salary}");
 
             if (employee is MaleEmployee maleEmployee)
@@ -27,9 +28,11 @@ namespace ShitApp01.EmployeeServices
             }
 
             ConsoleWriter.ChooseWriter("Удалить сотрудника", "Редактировать", "[Escape] для выхода");
+
             var inputHandler = new EmployeeInputHandler();
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
             EmployeeInputHandler.HandleUserInput(keyInfo.Key, employee);
+
         }
 
         public void DisplayAllEmployees()
@@ -94,6 +97,7 @@ namespace ShitApp01.EmployeeServices
         {
 
             Console.WriteLine("\nВведите индекс сотрудника для отображения подробной информации (или нажмите Escape для выхода):");
+
             var key = Console.ReadKey(true);
 
             if (key.Key == ConsoleKey.Escape)

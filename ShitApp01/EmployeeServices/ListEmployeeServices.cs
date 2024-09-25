@@ -15,7 +15,6 @@ namespace ShitApp01.EmployeeServices
         public ListEmployeeServices()
         {
             _inputHandler = new EmployeeInputHandler();
-           
         }
 
         public void AddEmployee(string gender)
@@ -30,11 +29,13 @@ namespace ShitApp01.EmployeeServices
             if (gender == "м")
             {
                 int dickLength = _inputHandler.GetGenderSpecificInput(gender);
+
                 newEmployee = new MaleEmployee(name, firstName, lastName, salary, "м", dickLength);
             }
             else if (gender == "ж")
             {
                 int boobSize = _inputHandler.GetGenderSpecificInput(gender);
+
                 newEmployee = new FemaleEmployee(name, firstName, lastName, salary, "ж", boobSize);
             }
             else
@@ -45,6 +46,7 @@ namespace ShitApp01.EmployeeServices
 
             EmployeeStorage.AddEmployee(newEmployee);
             EmployeeData.SaveEmployeesToJson(EmployeeStorage.Employees);
+
 
             PageCleaner.ClearAndWait($"\nСотрудник успешно добавлен\nКоличество сотрудников: {EmployeeStorage.Employees.Count}\n");
         }
@@ -83,6 +85,7 @@ namespace ShitApp01.EmployeeServices
                 return;
             }
 
+
             EmployeeStorage.ClearAll();
             EmployeeData.SaveEmployeesToJson(EmployeeStorage.Employees);
             PageCleaner.ClearAndWait("Все сотрудники удалены");
@@ -106,13 +109,17 @@ namespace ShitApp01.EmployeeServices
                     {
                         EmployeeStorage.RemoveEmployee(employee);
                         Console.WriteLine("Сотрудник удален.\n");
+
                         Thread.Sleep(1000);
+
                         return;
                     }
                     else if (confirmationKey.Key == ConsoleKey.N || confirmationKey.Key == ConsoleKey.Escape)
                     {
                         Console.WriteLine("Удаление отменено.\n");
+
                         Thread.Sleep(1000);
+
                         return;
                     }
                 }
