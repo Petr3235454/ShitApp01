@@ -15,11 +15,7 @@ namespace ShitApp01.EmployeeServices
         public ListEmployeeServices()
         {
             _inputHandler = new EmployeeInputHandler();
-            var loadedEmployees = EmployeeData.LoadEmployeesFromJson();
-            foreach (var employee in loadedEmployees)
-            {
-                EmployeeStorage.AddEmployee(employee);
-            }
+           
         }
 
         public void AddEmployee(string gender)
@@ -33,12 +29,12 @@ namespace ShitApp01.EmployeeServices
 
             if (gender == "м")
             {
-                string dickLength = _inputHandler.GetGenderSpecificInput(gender);
+                int dickLength = _inputHandler.GetGenderSpecificInput(gender);
                 newEmployee = new MaleEmployee(name, firstName, lastName, salary, "м", dickLength);
             }
             else if (gender == "ж")
             {
-                string boobSize = _inputHandler.GetGenderSpecificInput(gender);
+                int boobSize = _inputHandler.GetGenderSpecificInput(gender);
                 newEmployee = new FemaleEmployee(name, firstName, lastName, salary, "ж", boobSize);
             }
             else
@@ -50,7 +46,33 @@ namespace ShitApp01.EmployeeServices
             EmployeeStorage.AddEmployee(newEmployee);
             EmployeeData.SaveEmployeesToJson(EmployeeStorage.Employees);
 
-            PageCleaner.ClearAndWait($"Сотрудник успешно добавлен\nКоличество сотрудников: {EmployeeStorage.Employees.Count}\n");
+            PageCleaner.ClearAndWait($"\nСотрудник успешно добавлен\nКоличество сотрудников: {EmployeeStorage.Employees.Count}\n");
+        }
+
+        public void EditEmployee(Employee employee)
+        {
+            
+            
+            Console.WriteLine("\n[Редактирование информации о сотруднике]\n");
+
+            employee.Name = _inputHandler.GetName();
+            employee.FirstName = _inputHandler.GetFirstName();
+            employee.LastName = _inputHandler.GetLastName();
+            employee.Salary = _inputHandler.GetSalary();
+
+           
+            if (employee is MaleEmployee maleEmployee)
+            {
+                maleEmployee.DickLength = _inputHandler.GetGenderSpecificInput("м");
+            }
+            else if (employee is FemaleEmployee femaleEmployee)
+            {
+                femaleEmployee.BoobSize = _inputHandler.GetGenderSpecificInput("ж");
+            }
+
+            
+            EmployeeData.SaveEmployeesToJson(EmployeeStorage.Employees);
+
         }
 
         public static void ClearAllEmployees()
@@ -78,19 +100,19 @@ namespace ShitApp01.EmployeeServices
                 }
                 if (key.Key == ConsoleKey.NumPad1)
                 {
-                    Console.WriteLine("Вы уверены, что хотите удалить этого сотрудника? (Y/N)\n");
+                    Console.WriteLine("\nВы уверены, что хотите удалить этого сотрудника? (Y/N)\n");
                     var confirmationKey = Console.ReadKey(true);
                     if (confirmationKey.Key == ConsoleKey.Y)
                     {
                         EmployeeStorage.RemoveEmployee(employee);
                         Console.WriteLine("Сотрудник удален.\n");
-                        Thread.Sleep(2000);
+                        Thread.Sleep(1000);
                         return;
                     }
-                    else if (confirmationKey.Key == ConsoleKey.N)
+                    else if (confirmationKey.Key == ConsoleKey.N || confirmationKey.Key == ConsoleKey.Escape)
                     {
                         Console.WriteLine("Удаление отменено.\n");
-                        Thread.Sleep(2000);
+                        Thread.Sleep(1000);
                         return;
                     }
                 }

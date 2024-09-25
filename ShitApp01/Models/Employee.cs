@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace ShitApp01.Models
 {
-
+    
     public class Employee 
     {
         public string Name { get; set; }

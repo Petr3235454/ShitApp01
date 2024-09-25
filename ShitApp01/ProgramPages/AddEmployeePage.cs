@@ -25,6 +25,7 @@ namespace ShitApp01.ProgramPages
 
         public IPage NextChoice(ConsoleKey key)
         {
+            Console.Clear();
             Header.Logo(); 
 
             if (key == ConsoleKey.NumPad1)
@@ -39,13 +40,14 @@ namespace ShitApp01.ProgramPages
             }
             else if (key == ConsoleKey.NumPad3)
             {
+                Console.Clear();
                 return BackPage();
             }
             else
             {
-                Console.WriteLine("Неверный ввод");
+                PageCleaner.ClearAndWait("Неверный ввод");
             }
-
+            
             return this;
         }
 

@@ -15,20 +15,21 @@ namespace ShitApp01.EmployeeServices
         {
             Console.Clear();
             Header.Logo();
-            Console.WriteLine($"Имя: {employee.Name} Фамилия: {employee.FirstName} Отчество: {employee.LastName} Зарплата: {employee.Salary}");
+            Console.WriteLine($"\nИмя: {employee.Name} \nФамилия: {employee.FirstName} \nОтчество: {employee.LastName} \nЗарплата: {employee.Salary}");
 
             if (employee is MaleEmployee maleEmployee)
             {
-                Console.WriteLine($"Длина полового члена: {maleEmployee.DickLength}");
+                Console.WriteLine($"Длина полового члена: {maleEmployee.DickLength}\n");
             }
             else if (employee is FemaleEmployee femaleEmployee)
             {
-                Console.WriteLine($"Размер груди: {femaleEmployee.BoobSize}");
+                Console.WriteLine($"\nРазмер груди: {femaleEmployee.BoobSize}\n");
             }
 
             ConsoleWriter.ChooseWriter("Удалить сотрудника", "Редактировать", "[Escape] для выхода");
-            EmployeeStorage.RemoveEmployee(employee); 
-            PageCleaner.ClearAndWait("Информация о сотруднике обновлена.");
+            var inputHandler = new EmployeeInputHandler();
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            EmployeeInputHandler.HandleUserInput(keyInfo.Key, employee);
         }
 
         public void DisplayAllEmployees()
@@ -37,7 +38,7 @@ namespace ShitApp01.EmployeeServices
             {
                 Console.Clear();
                 Header.Logo();
-                Console.WriteLine("ВСЕ СОТРУДНИКИ");
+                Console.WriteLine("\nВСЕ СОТРУДНИКИ\n");
 
                 if (!EmployeeStorage.Employees.Any())
                 {
@@ -91,7 +92,8 @@ namespace ShitApp01.EmployeeServices
 
         private int GetEmployeeIndex(int employeeCount)
         {
-            Console.WriteLine("Введите индекс сотрудника для отображения подробной информации (или нажмите Escape для выхода):");
+
+            Console.WriteLine("\nВведите индекс сотрудника для отображения подробной информации (или нажмите Escape для выхода):");
             var key = Console.ReadKey(true);
 
             if (key.Key == ConsoleKey.Escape)
@@ -106,6 +108,7 @@ namespace ShitApp01.EmployeeServices
             else
             {
                 PageCleaner.ClearAndWait("Некорректный ввод. Пожалуйста, попробуйте снова.");
+                DisplayAllEmployees();
                 return GetEmployeeIndex(employeeCount);
             }
         }
