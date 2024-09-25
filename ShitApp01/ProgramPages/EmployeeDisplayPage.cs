@@ -11,7 +11,7 @@ using System.Text.Json.Serialization;
 
 namespace ShitApp01.ProgramPages
 {
-    internal class EmployeeDisplayPage : IPage
+    public class EmployeeDisplayPage : IPage
     {
         private readonly EmployeeDisplayServices services;
 
@@ -27,7 +27,7 @@ namespace ShitApp01.ProgramPages
 
         public void Functional()
         {
-            
+
         }
 
         public IPage NextChoice(ConsoleKey key)

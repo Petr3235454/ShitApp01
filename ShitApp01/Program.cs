@@ -1,4 +1,5 @@
-﻿using ShitApp01.Interfaces;
+﻿using ShitApp01.EmployeeServices;
+using ShitApp01.Interfaces;
 using System.Security.Cryptography.X509Certificates;
 
 namespace ShitApp01
@@ -7,17 +8,19 @@ namespace ShitApp01
     {
         static void Main(string[] args)
         {
+            EmployeeStorage.LoadEmployeesFromJson();
             IPage page = new HomePage();
             while (true)
             {
-                page.PrintInfo(); 
+                page.PrintInfo();
                 var key = Console.ReadKey().Key;
                 Console.Clear();
-                if (key == ConsoleKey.Escape || key == ConsoleKey.NumPad5 )
-                    page = page.BackPage(); 
+                if (key == ConsoleKey.Escape || key == ConsoleKey.NumPad5)
+                    page = page.BackPage();
                 else
-                    page = page.NextChoice(key); 
+                    page = page.NextChoice(key);
             }
         }
     }
 }
+

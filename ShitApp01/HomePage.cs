@@ -13,16 +13,19 @@ namespace ShitApp01
     {
         
         private readonly Dictionary<ConsoleKey, IPage> pages;
-
+        private readonly EmployeeDisplayPage employeeDisplayPage;
         public HomePage()
-        { 
+        {
+            
+
             pages = new Dictionary<ConsoleKey, IPage>()
             {
-                { ConsoleKey.NumPad1, new EmployeeDisplayPage() },
+                { ConsoleKey.NumPad1, new EmployeeDisplayPage() }, 
+
                 { ConsoleKey.NumPad2, new AddEmployeePage() },
             };
         }
-        
+
         public IPage BackPage()
         {
             return this;
